@@ -4,27 +4,57 @@ Import [Radix Colors](https://www.radix-ui.com/colors) into Figma as color varia
 
 ## Features
 
-- Import any of the 30+ Radix color scales
-- Choose which variants to import:
+- ✨ Import any of the 33 Radix color scales
+- 🎨 Choose which variants to import:
   - Light (solid colors)
   - Light Alpha (transparent)
   - Dark (solid colors)
   - Dark Alpha (transparent)
-- Create a new collection or add to an existing one
-- Updates existing variables if they already exist
-- Full 12-step color scale for each color
+- 📦 Create a new collection or add to an existing one
+- 🔄 Updates existing variables if they already exist
+- 📊 Full 12-step color scale for each color
+- 🌓 Theme-aware UI (adapts to Figma's light/dark mode)
+- 🎯 Real-time color counter and smart button validation
+- ⚡ Select All / Deselect All for quick workflows
 
 ## Installation
 
-### Option 1: Import from Manifest (Development)
+### For Users (Coming Soon)
 
-1. Open Figma Desktop
-2. Go to **Plugins** → **Development** → **Import plugin from manifest**
-3. Navigate to this directory and select `manifest.json`
+This plugin will be available on the Figma Community. Stay tuned!
 
-### Option 2: Publish to Figma Community (Later)
+### For Testers & Contributors
 
-You can publish this plugin to the Figma Community to share with others.
+Want to test the plugin before it's published? Follow these steps:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/monkeyman1979/radix-color-figma-plugin.git
+   cd radix-color-figma-plugin
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Build the plugin**
+   ```bash
+   npm run build
+   ```
+   This creates the `dist/` folder with the compiled plugin files.
+
+4. **Import into Figma Desktop**
+   - Open Figma Desktop (plugin development requires desktop app)
+   - Go to **Menu** → **Plugins** → **Development** → **Import plugin from manifest...**
+   - Navigate to the cloned folder and select `manifest.json`
+   - Click **Open**
+
+5. **Run the plugin**
+   - Right-click anywhere in your Figma file
+   - Go to **Plugins** → **Development** → **Radix Colors Importer (Developer VM)**
+
+**Note:** You need Node.js installed to build the plugin. The `dist/` folder is gitignored, so building is required after cloning.
 
 ## Usage
 
@@ -107,8 +137,41 @@ npm run watch
 ### Making Changes
 
 1. Edit source files in `src/`
-2. Run `npm run build`
-3. Reload the plugin in Figma
+2. Run `npm run build` (or `npm run watch` for automatic rebuilds)
+3. In Figma, right-click → **Plugins** → **Development** → **Reload plugin**
+
+## Contributing
+
+Contributions are welcome! This project uses a two-branch workflow:
+
+- **`main`** - Stable, production-ready code
+- **`develop`** - Active development branch
+
+### Contribution Workflow
+
+1. Fork the repository
+2. Create a feature branch from `develop`:
+   ```bash
+   git checkout develop
+   git checkout -b feature/your-feature-name
+   ```
+3. Make your changes and test thoroughly
+4. Commit with clear, descriptive messages
+5. Push to your fork
+6. Open a Pull Request to the `develop` branch
+
+### Branch Protection
+
+Both `main` and `develop` branches are protected:
+- All changes must go through Pull Requests
+- This ensures code quality and allows for review
+
+### Development Tips
+
+- Use `npm run watch` during development for automatic rebuilds
+- Test in both light and dark Figma themes
+- Verify all color variants import correctly (Light, Light Alpha, Dark, Dark Alpha)
+- Check that the import button validation works (disabled until colors are selected)
 
 ## Available Colors
 
@@ -130,10 +193,50 @@ Jade, Green, Grass, Lime, Mint, Sky
 ### Special
 Black Alpha, White Alpha
 
+## Troubleshooting
+
+### Plugin not showing up in Figma
+- Make sure you're using **Figma Desktop**, not the browser version
+- Verify you imported the plugin via **Plugins → Development → Import plugin from manifest**
+- Check that you selected the correct `manifest.json` file
+
+### Colors not importing
+- Ensure at least one color is selected (button is disabled until selection)
+- Verify at least one variant is selected (Light, Light Alpha, Dark, or Dark Alpha)
+- Check the browser console in Figma for error messages
+
+### Build errors
+- Make sure Node.js is installed: `node --version`
+- Delete `node_modules` and reinstall: `rm -rf node_modules && npm install`
+- Try clearing the build cache: `rm -rf dist && npm run build`
+
+### Alpha colors appear solid
+- This has been fixed in the current version
+- Make sure you've pulled the latest code and rebuilt: `git pull && npm run build`
+- Reload the plugin in Figma after rebuilding
+
+## Technology Stack
+
+- **TypeScript** - Type-safe development
+- **esbuild** - Fast bundling and compilation
+- **Figma Plugin API** - Variable collections and color management
+- **@radix-ui/colors** - Official Radix Colors package
+
 ## License
 
-MIT
+MIT - See [LICENSE](LICENSE) file for details
 
 ## Credits
 
-Built with [Radix Colors](https://www.radix-ui.com/colors) by Radix UI.
+- **Radix Colors** by [Radix UI](https://www.radix-ui.com/colors) - The comprehensive color system that powers this plugin
+- Plugin developed with ❤️ for the design community
+
+## Links
+
+- [GitHub Repository](https://github.com/monkeyman1979/radix-color-figma-plugin)
+- [Radix Colors Documentation](https://www.radix-ui.com/colors/docs/overview/getting-started)
+- [Figma Plugin API](https://www.figma.com/plugin-docs/)
+
+---
+
+**Found this plugin helpful?** Star the repo on GitHub and share it with your design team!
