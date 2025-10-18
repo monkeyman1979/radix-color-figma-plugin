@@ -1,14 +1,5 @@
 import { RADIX_COLORS, getColorsByCategory } from './utils/radix-data';
-import type { ImportMessage, UIMessage } from './types';
-
-// Hide the "JavaScript not loaded" warning immediately
-const jsCheck = document.getElementById('jsCheck');
-if (jsCheck) {
-  jsCheck.textContent = '✓ JavaScript loaded successfully!';
-  jsCheck.style.background = '#d4edda';
-  jsCheck.style.color = '#155724';
-  setTimeout(() => jsCheck.remove(), 2000);
-}
+import type { ImportMessage, UIMessage, ResizeMessage } from './types';
 
 // DOM elements
 const collectionModeRadios = document.querySelectorAll<HTMLInputElement>('input[name="collectionMode"]');
@@ -18,7 +9,6 @@ const existingCollectionLabel = document.getElementById('existingCollectionLabel
 const existingCollectionSelect = document.getElementById('existingCollection') as HTMLSelectElement;
 const colorGrid = document.getElementById('colorGrid') as HTMLDivElement;
 const colorCounter = document.getElementById('colorCounter') as HTMLDivElement;
-const debugInfo = document.getElementById('debugInfo') as HTMLDivElement;
 const selectAllButton = document.getElementById('selectAll') as HTMLButtonElement;
 const deselectAllButton = document.getElementById('deselectAll') as HTMLButtonElement;
 const variantCheckboxes = document.querySelectorAll<HTMLInputElement>('input[name="variant"]');
@@ -33,6 +23,9 @@ let collections: Array<{ id: string; name: string }> = [];
 init();
 
 function init() {
+  // Adjust UI size based on viewport
+  adjustUISize();
+
   // Request existing collections from plugin
   parent.postMessage({ pluginMessage: { type: 'get-collections' } }, '*');
 
@@ -41,6 +34,29 @@ function init() {
 
   // Setup event listeners
   setupEventListeners();
+}
+
+function adjustUISize() {
+  const DEFAULT_WIDTH = 500;
+  const DEFAULT_HEIGHT = 720;
+  const MAX_HEIGHT = 800;
+
+  // Get available screen height
+  const availableHeight = window.screen.availHeight;
+
+  // Calculate optimal height (90% of screen, capped at MAX_HEIGHT)
+  const optimalHeight = Math.min(Math.floor(availableHeight * 0.9), MAX_HEIGHT);
+
+  // Only resize if the optimal height is smaller than default
+  // (allows it to be taller on large screens, smaller on small screens)
+  if (optimalHeight < DEFAULT_HEIGHT) {
+    const resizeMessage: ResizeMessage = {
+      type: 'resize',
+      width: DEFAULT_WIDTH,
+      height: optimalHeight,
+    };
+    parent.postMessage({ pluginMessage: resizeMessage }, '*');
+  }
 }
 
 function setupEventListeners() {
@@ -64,6 +80,16 @@ function setupEventListeners() {
 
   // Import button
   importButton.addEventListener('click', handleImport);
+
+  // Listen for window resize (handles moving between screens)
+  let resizeTimeout: ReturnType<typeof setTimeout>;
+  window.addEventListener('resize', () => {
+    // Debounce resize events
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      adjustUISize();
+    }, 250);
+  });
 
   // Listen for messages from plugin
   window.onmessage = (event) => {
@@ -136,39 +162,15 @@ function handleCollectionsResponse(receivedCollections: Array<{ id: string; name
 }
 
 function renderColorGrid() {
-  console.log('renderColorGrid called');
-  console.log('colorGrid element:', colorGrid);
-
-  // Show debug info in UI
-  if (debugInfo) {
-    debugInfo.style.display = 'block';
-    debugInfo.textContent = 'Debug: renderColorGrid called';
-  }
-
   if (!colorGrid) {
     console.error('colorGrid element not found!');
-    if (debugInfo) {
-      debugInfo.textContent = 'ERROR: colorGrid element not found!';
-      debugInfo.style.background = '#f8d7da';
-      debugInfo.style.color = '#721c24';
-    }
     return;
   }
 
   const colorsByCategory = getColorsByCategory();
-  console.log('colorsByCategory:', colorsByCategory);
-
-  const categoryCount = Object.keys(colorsByCategory).length;
-  if (debugInfo) {
-    debugInfo.textContent = `Debug: Found ${categoryCount} categories. Rendering...`;
-  }
-
   colorGrid.innerHTML = '';
 
-  let totalColorsRendered = 0;
   for (const [category, colors] of Object.entries(colorsByCategory)) {
-    console.log(`Rendering category: ${category} with ${colors.length} colors`);
-    totalColorsRendered += colors.length;
 
     // Add category header
     const header = document.createElement('div');
@@ -202,18 +204,6 @@ function renderColorGrid() {
 
       colorGrid.appendChild(colorItem);
     });
-  }
-
-  // Update debug info with success message
-  if (debugInfo) {
-    debugInfo.textContent = `✓ Rendered ${totalColorsRendered} colors in ${categoryCount} categories`;
-    debugInfo.style.background = '#d4edda';
-    debugInfo.style.color = '#155724';
-
-    // Hide debug info after 3 seconds
-    setTimeout(() => {
-      debugInfo.style.display = 'none';
-    }, 3000);
   }
 
   // Initialize color counter
