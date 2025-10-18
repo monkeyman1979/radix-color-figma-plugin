@@ -5,7 +5,7 @@ import type { PluginMessage, ImportMessage } from './types';
 // Show the plugin UI
 figma.showUI(__html__, {
   width: 500,
-  height: 600,
+  height: 720,
   themeColors: true,
 });
 
@@ -15,6 +15,8 @@ figma.ui.onmessage = async (msg: PluginMessage) => {
     await handleGetCollections();
   } else if (msg.type === 'import') {
     await handleImport(msg);
+  } else if (msg.type === 'resize') {
+    figma.ui.resize(msg.width, msg.height);
   }
 };
 

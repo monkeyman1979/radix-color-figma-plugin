@@ -17,6 +17,12 @@ export interface GetCollectionsMessage {
   type: 'get-collections';
 }
 
+export interface ResizeMessage {
+  type: 'resize';
+  width: number;
+  height: number;
+}
+
 export interface CollectionsResponseMessage {
   type: 'collections-response';
   collections: Array<{
@@ -25,7 +31,7 @@ export interface CollectionsResponseMessage {
   }>;
 }
 
-export type PluginMessage = ImportMessage | GetCollectionsMessage;
+export type PluginMessage = ImportMessage | GetCollectionsMessage | ResizeMessage;
 export type UIMessage = CollectionsResponseMessage;
 
 // Radix color metadata

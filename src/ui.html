@@ -243,7 +243,7 @@
               <input type="radio" name="collectionMode" value="new" checked>
               Create new collection
             </label>
-            <input type="text" id="collectionName" placeholder="Collection name" value="Primitive Color">
+            <input type="text" id="collectionName" placeholder="Collection name" value="Primitive Colors">
           </div>
           <div class="collection-option">
             <label id="existingCollectionLabel">
@@ -265,8 +265,6 @@
             <button class="secondary" id="deselectAll">Deselect All</button>
           </div>
         </div>
-        <div id="jsCheck" style="background: #f8d7da; padding: 8px; margin-bottom: 8px; font-size: 11px; border-radius: 4px; color: #721c24;">⚠️ JavaScript not loaded yet...</div>
-        <div id="debugInfo" style="background: #fff3cd; padding: 8px; margin-bottom: 8px; font-size: 11px; border-radius: 4px; display: none;"></div>
         <div class="color-counter" id="colorCounter">0 of 34 colors selected</div>
         <div class="color-grid" id="colorGrid">
           <!-- Colors will be populated by JavaScript -->
@@ -278,19 +276,19 @@
         <div class="variants-grid checkbox-group">
           <label>
             <input type="checkbox" name="variant" value="light" checked>
-            Light
+            Light Mode
           </label>
           <label>
             <input type="checkbox" name="variant" value="lightAlpha">
-            Light Alpha
+            Light Mode Alpha
           </label>
           <label>
             <input type="checkbox" name="variant" value="dark">
-            Dark
+            Dark Mode
           </label>
           <label>
             <input type="checkbox" name="variant" value="darkAlpha">
-            Dark Alpha
+            Dark Mode Alpha
           </label>
         </div>
         <div class="error" id="variantError" style="display: none;">
